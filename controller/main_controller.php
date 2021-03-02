@@ -2,7 +2,10 @@
 //Set globally used variables
 $title = "Tutorial Scheduling Made Easy";
 $message;
-$body=[];
+$body= null;
+$header = "view/all/header.php";
+$footer = "view/all/footer.php";
+$view = "view/allTutorials.php";
 //instantiate new class for the xml handler
 include_once "model/xml_class.php";
 $schedule = new xml_handler;
@@ -28,23 +31,23 @@ if (isset($_POST['addMe'])) {
 
 
 //Load Views
-
-include_once "view/all/header.php";
 if (isset($_GET['v'])) {
-  $view = $inputHandler->cleanInputNoSpace($_GET['v']);
-  if (file_exists("view/".$view.".php")) {
-    $id = $inputHandler->cleanInputNoSpace($_GET['id']);
+  $page = $inputHandler->cleanInputNoSpace($_GET['v']);
+  if (file_exists("view/".$page.".php")) {
     if ($_GET['v'] == "tutorial" && isset($_GET['id'])) {
+      $id = $inputHandler->cleanInputNoSpace($_GET['id']);
       $body = $schedule->get_tutorial_details($id);
+    } elseif ($_GET['v'] == "teacherAllTutorials" && isset($_GET['teacher']) && strlen($_GET['teacher']) > 0) {
+      $tutor = $inputHandler->cleanInputPeriodsNoSpaces($_GET['teacher']);
+      $body = $schedule->get_all_xml_files_for_tutor($tutor);
     }
-    include_once "view/".$view.".php";
+    $view = "view/".$page.".php";
   } else {
-    $body = $schedule->get_all_xml_files();
-  include_once "view/allTutorials.php";
+    $body = $schedule->get_all_tutors_from_xml();
 }
 } else {
-  $body = $schedule->get_all_xml_files();
-  include_once "view/allTutorials.php";
-
+  $body = $schedule->get_all_tutors_from_xml();
 }
-include_once "view/all/footer.php";
+include_once $header;
+include_once $view;
+include_once $footer;
