@@ -2,7 +2,10 @@
 //set any globals
 $title = "";
 $body = null;
+$view = "view/admin/modAllTutorials.php";
 $message;
+
+
 //instantiate new instance of xml class
 include_once "model/xml_class.php";
 $admin = new xml_handler;
@@ -55,8 +58,9 @@ if (isset($_POST['deleteTutorial'])) {
   $message = $admin->updateName($time,$currentName,$newName,$entry);
 }
 
-//handle page assembly
-include_once "view/all/admin_all/header.php";
+//check GET inputs for page assembly
+//NEED TO IMPROVE THIS
+$tutorList = [];
 if (isset($_GET['v'])) {
   $view = $inputHandler->cleanInputNoSpace($_GET['v']);
   if (isset($_GET['tid'])) {
@@ -66,18 +70,25 @@ if (isset($_GET['v'])) {
     if ($view == "singleMod" && isset($_GET['tid'])) {
       $body = $admin->get_tutorial_details($tid);
     }
-    include_once "view/admin/".$view.".php";
+    $view = "view/admin/".$view.".php";
   } else {
-    $message = "That tutorial was not found";
-    $body = $admin->get_all_xml_files();
-    include_once "view/admin/modAllTutorials.php";
+    $message = "That page was not found";
+    $body = $admin->get_all_tutors_from_xml();
+    $view = "view/admin/modAllTutorials.php";
 }
+} elseif (isset($_GET['teacher']) && strlen($_GET['teacher']) > 0) {
+  $teacher = $inputHandler->cleanInputPeriodsNoSpaces($_GET['teacher']);
+  $body = $admin->get_all_xml_files_for_tutor($teacher);
+  $view = "view/admin/teacherAllTutorials.php";
+} elseif(sizeof($_GET) > 0) {
+  $message = "The page you are trying to reach is not valid";
+  $body = $admin->get_all_tutors_from_xml();
+  $view = "view/admin/modAllTutorials.php";
 } else {
-  $message = "The page you are trying to reach does not exist";
-
-  $body = $admin->get_all_xml_files();
-  include_once "view/admin/modAllTutorials.php";
-
-
+  $body = $admin->get_all_tutors_from_xml();
+  $view = "view/admin/modAllTutorials.php";
 }
+//Assemble page
+include_once "view/all/admin_all/header.php";
+include_once $view;
 include_once "view/all/admin_all/footer.php";

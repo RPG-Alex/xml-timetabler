@@ -38,7 +38,7 @@ class xml_handler{
         $times->appendChild($time_node);
       }
       $root_node->appendChild($tut_name);
-      $root_node->appendChild($tutor_name)
+      $root_node->appendChild($tutor_name);
       $root_node->appendChild($times);
       $dom->appendChild($root_node);
       if ($dom->save($xml_file_name)) {
@@ -63,6 +63,39 @@ class xml_handler{
       }
     }
     return $all_found;
+  }
+  public function get_all_xml_files_for_tutor($tutor){
+    //This will return an array of the xml files for existing tutorials
+    $getDirectoryContent = scandir("$this->xml_directory");
+    // need to make this an array. Needs to have file name and the tutorial name
+    $all_found = [];
+    foreach ($getDirectoryContent as $file) {
+      if ($file != "." AND $file != "..") {
+        $afile = "$this->xml_directory/$file";
+        $xml = simplexml_load_file("$afile");
+        if ($xml->tutor->attributes()->tutor_id == $tutor) {
+          $all_found[] = [$file =>$xml];
+        }
+
+      }
+    }
+    return $all_found;
+  }
+
+  public function get_all_tutors_from_xml(){
+    //This will return an array of the xml files for existing tutorials
+    $getDirectoryContent = scandir("$this->xml_directory");
+    // need to make this an array. Needs to have file name and the tutorial name
+    $all_tutors = [];
+    foreach ($getDirectoryContent as $file) {
+      if ($file != "." AND $file != "..") {
+        $afile = "$this->xml_directory/$file";
+        $xml = simplexml_load_file("$afile");
+
+        $all_tutors[] = $xml->tutor;
+      }
+    }
+    return $all_tutors;
   }
 
   public function get_tutorial_details($tutorial_name){

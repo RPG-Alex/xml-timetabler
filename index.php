@@ -11,7 +11,6 @@ include_once "controller/main_controller.php";
 
 /*
 Things that need doing:
-Update backend so tutor name is associated with turials
 Update Student and Teacher views first select teacher then tutorials (only generate list of existing tutorials)
 Finish front end presentation
 Refactor to avoid redundancy

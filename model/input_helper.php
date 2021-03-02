@@ -20,5 +20,10 @@ class input_helper {
     $sanitized = preg_replace("/[^a-zA-Z0-9]+/", "", $trim);
     return $sanitized;
 }
+public function cleanInputPeriodsNoSpaces($input){
+  //Will remove anything not a-z, A-Z, 0-9, or . (period/full stop)
+  $sanitized = preg_replace("/[^a-zA-Z0-9.]+/", "", $input);
+  return $sanitized;
+}
   //May neeed to extend this class for inputs for logging in etc.
 }
