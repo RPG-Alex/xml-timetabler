@@ -11,13 +11,10 @@ if ($body != null) {
       echo ":
     </th>
 ";
-  foreach ($body as $single) {
-    foreach ($single as $key => $value) {
-      //This strips the past file name of the xml
-      $key = substr($key,0,-4);
-      echo "<tr><td><a href='index.php?v=tutorial&teacher=".$value->tutor->attributes()->tutor_id."&id=$key'>$value->tutorial</a></td>";
-    }
+
+foreach ($body as $listing) {
+    echo "<tr><td><a href='index.php?v=tutorial&teacher=".$listing['xml']->tutor."&id=".$listing['file']."'>".$listing['xml']->tutorial."</a></td>";
   }
 } else {
-  echo "<h4 style='color: blue'>No Tutorials Schedule For This Tutor</h4>";
+echo "<h4 style='color: blue'>No Tutorials Schedule For This Tutor</h4>";
 }

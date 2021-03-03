@@ -49,21 +49,6 @@ class xml_handler{
     }
     return $message;
   }
-
-  public function get_all_xml_files(){
-    //This will return an array of the xml files for existing tutorials
-    $getDirectoryContent = scandir("$this->xml_directory");
-    // need to make this an array. Needs to have file name and the tutorial name
-    $all_found = [];
-    foreach ($getDirectoryContent as $file) {
-      if ($file != "." AND $file != "..") {
-        $afile = "$this->xml_directory/$file";
-        $xml = simplexml_load_file("$afile");
-        $all_found[] = [$file =>$xml->tutorial];
-      }
-    }
-    return $all_found;
-  }
   public function get_all_xml_files_for_tutor($tutor){
     //This will return an array of the xml files for existing tutorials
     $getDirectoryContent = scandir("$this->xml_directory");
@@ -74,9 +59,12 @@ class xml_handler{
         $afile = "$this->xml_directory/$file";
         $xml = simplexml_load_file("$afile");
         if ($xml->tutor->attributes()->tutor_id == $tutor) {
-          $all_found[] = [$file =>$xml];
+          $all_found[] =
+          [
+            'file' => substr($file,0,-4),
+            'xml' => $xml
+          ];
         }
-
       }
     }
     return $all_found;
@@ -91,7 +79,6 @@ class xml_handler{
       if ($file != "." AND $file != "..") {
         $afile = "$this->xml_directory/$file";
         $xml = simplexml_load_file("$afile");
-
         $all_tutors[] = $xml->tutor;
       }
     }
@@ -102,8 +89,7 @@ class xml_handler{
     $file = "$this->xml_directory/$tutorial_name.xml";
     if (file_exists($file)) {
       $xml = simplexml_load_file("$file");
-      $allTimes = $xml;
-    return $allTimes;
+      return $xml;
   }
 }
 
@@ -161,17 +147,17 @@ class xml_handler{
           $xml->xpath("//all_tutorials/times/timeslot[@date_time='$time']")[0]->attributes()['student'] = $newName;
           $xml->asXML($file);
           return $message="Successfully updated name!";
-        } else {
-          return $message = "Unable to update name";
+          } else {
+            return $message = "Unable to update name";
+          }
         }
       }
+       else {
+        return $message="Something has gone wrong. Name not updated";
+      }
+      //This releases the file stream for editing
+      fclose($stream);
     }
-     else {
-      return $message="Something has gone wrong. Name not updated";
-    }
-    //This releases the file stream for editing
-    fclose($stream);
-  }
 
 
   public function addName($time,$name,$entry){
