@@ -101,18 +101,12 @@ class xml_handler{
   public function get_tutorial_details($tutorial_name){
     $file = "$this->xml_directory/$tutorial_name.xml";
     if (file_exists($file)) {
-      $allTimes = [];
       $xml = simplexml_load_file("$file");
-      $timeslot = $xml->times->timeslot;
-      for ($i=0; $i < count($timeslot) ; $i++) {
-        $time = $timeslot[$i]->attributes()->date_time;
-        $allTimes[] = ["$time" => $timeslot[$i]->attributes()->student];
-      }
-    } else {
-      $allTimes ="Unable to find tutorial listing";
-    }
+      $allTimes = $xml;
     return $allTimes;
   }
+}
+
   public function getTeachers(){
     if (file_exists($this->teachers)) {
       $xml = simplexml_load_file("$this->teachers");
@@ -155,11 +149,6 @@ class xml_handler{
   }
 
   public function updateName($time,$currentName,$newName,$entry){
-
-
-    //just sanitizes name, only a-z **REMOVE AFTER PROPER IMPLEMENTATION OF INPUT HELPER CLASS IN CONTROLLER!
-    $newName = preg_replace("/[^a-zA-Z]+/", "", $newName);
-    //dELETE ABOVE WHEN TIME
     $file = "$this->xml_directory/".$entry.".xml";
     $xml = simplexml_load_file($file);
     //This should be locking my file as a stream

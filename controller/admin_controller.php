@@ -36,8 +36,6 @@ if (isset($_POST['submitSchedule'])) {
 if (isset($_POST['deleteTutorial'])) {
   $tutorial = $_POST['tutorialName'];
   $message = $admin->deleteTutorial($tutorial);
-} elseif (isset($_POST['updateTutorial'])) {
-
 } elseif (isset($_POST['removeName'])) {
   $time = $_POST['time'];
   $entry = $inputHandler->cleanInputNoSpace($_POST['entry']);
@@ -46,13 +44,13 @@ if (isset($_POST['deleteTutorial'])) {
   $message = $admin->updateName($time,$currentName,$newName,$entry);
 } elseif (isset($_POST['modName'])) {
   $time = $_POST['time'];
-  $entry = $inputHandler->cleanInputNoSpace($_POST['entry']);
+  $entry = $inputHandler->cleanInputNoSpaceToLower($_POST['entry']);
   $currentName = $inputHandler->cleanInputToLower($_POST['currentName']);
   $newName = $inputHandler->cleanInputToLower($_POST['updateName']);
   $message = $admin->updateName($time,$currentName,$newName,$entry);
 } elseif (isset($_POST['newName'])) {
   $time = $_POST['time'];
-  $entry = $inputHandler->cleanInputNoSpace($_POST['entry']);
+  $entry = $inputHandler->cleanInputToLower($_POST['entry']);
   $currentName = "";
   $newName = $inputHandler->cleanInputToLower($_POST['myName']);
   $message = $admin->updateName($time,$currentName,$newName,$entry);

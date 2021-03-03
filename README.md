@@ -18,3 +18,9 @@ Before Implementing:
 Q: What do I need to run this?
 
 A: This application was built in vanilla php and should run on whatever server stack you would run your php on. As there is no database, you can add this app to a directory that it will live at, connect it to your login system or however you wish to implement it, and then get straight to using it!
+
+  However You will need a teacher-list.xml file in the root directory. The structure is as follows:
+  `<teachers>
+    <teacher id="Teacher.Name" name="Teacher name" />
+    </teachers>`
+  The application, as written, will use the id attribute for urls and associating teachers with tutorials, and the name attribute for the teachers actual name. 
